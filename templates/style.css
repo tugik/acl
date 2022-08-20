@@ -1,0 +1,135 @@
+
+.button {
+  border: none;
+  color: black;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 1px 1px;
+  cursor: pointer;
+  border-width: 1px;
+  border-color: #98AFC7;
+  border-style: solid;
+}
+
+.select {
+  color: black;
+  padding: 5px 5px;
+  text-align: right;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 2px 2px;
+  cursor: pointer;
+  text-align: left;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #81D8D0;
+}
+
+.form {
+  border-width: 2px;
+  border-color: #4EE2EC;
+  border-style: solid;
+  text-align: right;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 1px 1px;
+  cursor: pointer;
+  text-align: left;
+
+}
+
+.button0 {
+  float: right;
+}
+
+.button1 {
+  background-color: #4EE2EC; /* Green */
+  border-radius: 10px; /* Радиус скругления */
+}
+
+.select1 {
+  border-radius: 5px; /* Радиус скругления */
+}
+
+
+
+
+
+
+
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  background: white;
+  max-width: 100%;
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+th {
+  font-weight: normal;
+  font-size: 20px;
+  color: #000000;
+  border-bottom: 8px solid #4EE2EC;
+  padding: 10px 8px;
+}
+td {
+  border-bottom: 1px solid #4EE2EC;
+  color: #000000;
+  padding: 9px 8px;
+  transition: .3s linear;
+}
+tr:hover td  {
+  background: #9AFEFF;
+  color: #000000;
+}
+tr:nth-child(2n) {
+  background: #F0FFFF;
+}
+
+
+
+
+
+
+
+.tooltip {
+position: relative;
+display: inline-block;
+border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+visibility: hidden;
+width: 120px;
+background-color: #555;
+color: #fff;
+text-align: center;
+border-radius: 6px;
+padding: 5px 0;
+position: absolute;
+z-index: 1;
+bottom: 125%;
+left: 50%;
+margin-left: -60px;
+opacity: 0;
+transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+content: "";
+position: absolute;
+top: 100%;
+left: 50%;
+margin-left: -5px;
+border-width: 5px;
+border-style: solid;
+border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+visibility: visible;
+opacity: 1;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <title>Services</title>
+    </head>
+    <body>
+        <h2> 
+            <img src="/templates/main-icon.png" width=25px; height=25px;>   Service List  
+            <button class="button button0 button1" onclick="location.href='/';">Menu</button>
+            <button class="button button0 button1" onclick="location.href='/servicesadd';">Add Service</button>
+        </h2>
+        <table>
+            <thead><th>Id</th><th>Name</th><th>Description</th><th>Status</th><th></th></thead>
+            {{range . }}
+            <tr>
+                <td>{{.Id}}</td>
+                <td> <a href="/servicesedit/{{.Id}}">{{.Name}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.Status}}</td>
+                <td>
+                    <a href="/servicesedit/{{.Id}}"><b>Edit</b></a> |
+                    <a href="/servicesdelete/{{.Id}}">Delete</a>
+                </td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>

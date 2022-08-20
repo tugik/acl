@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <title>Rules</title>
+    </head>
+    <body>
+        <h2>
+            <img src="/templates/main-icon.png" width=25px; height=25px;>   Rules List  
+            <button class="button button0 button1" onclick="location.href='/';">Menu</button>
+            <button class="button button0 button1" onclick="location.href='/rulesadd';">Add Rules</button>
+        </h2>
+        <table>
+            <thead><th>Id</th><th>Source</th><th>Destination</th><th>Name</th><th>Description</th><th>Status</th><th></th></thead>
+            {{range . }}
+            <tr>
+                <td>{{.Id}}</td>
+                <td><a href="/servicesedit/{{.Sid}}">{{.Source}}</td>
+                <td><a href="/servicesedit/{{.Did}}">{{.Destination}}</td>
+                <td><a href="/rulesedit/{{.Id}}">{{.Name}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.Status}}</td>
+                <td><a href="/rulesedit/{{.Id}}">Edit</a> |
+                    <a href="/rulesdelete/{{.Id}}">Delete</a>
+                </td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>
+

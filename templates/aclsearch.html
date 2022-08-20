@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <title>ACL</title>
+    </head>
+    <body>
+
+        <h2>
+        <img src="/templates/main-icon.png" width=25px; height=25px;> ACL <a><font size="2" color="#808080">(*last 1000 acls)</font></a>
+        <form method="GET" action="/aclsearch/" class="button0">
+        <input class="form" type="text" name="id"  size="50"/>
+        <button class="button button1" type="submit">Search</button>
+        <button class="button button1" type="button"  onclick="location.href='/';">Menu</button>
+        </form>
+        </h2>
+        <form method="POST">
+        <table>
+            <thead><th>Protocol</th><th>Source</th><th>Destination</th><th>Port</th><th></th><th>R name</th><th>S item</th><th>D item</th><th>S service</th><th>D service</th></thead>
+            {{range . }}
+            <tr>
+                <td>{{.Protocol}}</td>
+                <td>{{.Source}}</td>
+                <td>{{.Destination}}</td>
+                <td>{{.Port}}</td>
+                <td></td>
+                <td><a href="/rulesedit/{{.Rid}}">{{.Rname}}</td>
+                <td><a href="/itemsedit/{{.Siid}}">{{.Sitem}}</td>
+                <td><a href="/itemsedit/{{.Diid}}">{{.Ditem}}</td>
+                <td><a href="/servicesedit/{{.Ssid}}">{{.Sservice}}</td>
+                <td><a href="/servicesedit/{{.Dsid}}">{{.Dservice}}</td>
+            </tr>
+            {{end}}
+        </table>
+       </form>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <title>Add Service</title>
+    </head>
+    <body>
+        <h3><img src="/templates/main-icon.png" width=25px; height=25px;>   Add Service</h3><br>
+        <form method="POST">
+            <label><b> Name:</b><span style="color:red;" > *</span></label><br>
+            <input class="form" type="text" name="name" size="20"required/><br><br>
+            <label><b> Description:</b></label><br>
+            <textarea class="form" name="description" style="width:225px"></textarea><br><br>
+            <label><b>Status:</b></label><br>
+            <select class="select select1" name="status" style="width:100px">
+                <option value="enabled" selected>enabled</option>
+                <option value="disabled">disabled</option>
+                <option value="deleted">deleted</option>
+             </select><br><br>
+             <span style="margin-left: 10px; color:red;" > * required</span><br><br>
+            <input class="button button1" type="submit" value="Add Service" style="height:40px; width:100px;"/>
+            <button class="button button1" style="height:40px; width:100px;" onclick="history.back();">Cancel</button>
+        </form>
+    </body>
+</html>

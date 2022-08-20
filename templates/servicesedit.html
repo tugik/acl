@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <title>Edt Service</title>
+    </head>
+    <body>
+        <h3>Edit Service</h3><br>
+        <form method="POST">
+            <input type="hidden" name="id" value="{{.Service.Id}}" />
+            <label><b>Name:</b></label><br>
+            <input class="form" type="text" name="name" value="{{.Service.Name}}" size="20" required/><br><br>
+            <label><b>Description:</b></label><br>
+            <textarea class="form" type="text" name="description" value="{{.Service.Description}}" style="width:225px">{{.Service.Description}}</textarea><br><br>
+            <label><b>Status:</b></label><br>
+            <select class="select select1" name="status" style="width:100px">
+                <option value="enabled" {{if eq "enabled" .Service.Status}}selected{{end}} > enabled</option><br><br>
+                <option value="disabled" {{if eq "disabled" .Service.Status}}selected{{end}} > disabled</option><br><br>
+                <option value="deleted" {{if eq "deleted" .Service.Status}}selected{{end}} > deleted</option><br><br>
+            </select><br><br><br>
+            <button class="button button1" type="submit" style="height:40px; width:120px;">Edit Service</button>
+            <button class="button button1" type="button" style="height:40px; width:120px;" onclick="history.back();">Cancel</button>
+         </form>
+    <br><br><br><br>
+    <span><font size="3" color="#808080">Items that are included in this Service</font></span>
+    <span class="button button0 button1" type="button" href="/itemsadd?id={{.Service.Id}}">Add Item</span>
+       <table>
+            <thead><th>Id</th><th>Service</th><th>Name</th><th>Description</th><th>Protocol</th><th>cidr</th><th>port</th><th>Status</th></thead>
+            {{range .Items }}
+            <tr>
+                <td>{{.Id}}</td>
+                <td><a href="/servicesedit/{{.Sid}}">{{.Sname}}</td>
+                <td><a href="/itemsedit/{{.Id}}">{{.Name}}</a></td>
+                <td>{{.Description}}</td>
+                <td>{{.Protocol}}</td>
+                <td>{{.Cidr}}</td>
+                <td>{{.Port}}</td>
+                <td>{{.Status}}</td>
+                </td>
+            </tr>
+            {{end}}
+        </table>
+        <br><br><br>
+        <span><font size="3" color="#808080">SOURCE ACLs that are included in this Service</font></span>
+        <table>
+            <thead><th>Protocol</th><th>Source</th><th>Destination</th><th>Port</th><th></th><th>R name</th><th>S item</th><th>D item</th><th>S service</th><th>D service</th></thead>
+            {{range .SAcls }}
+            <tr>
+                <td>{{.Protocol}}</td>
+                <td>{{.Source}}</td>
+                <td>{{.Destination}}</td>
+                <td>{{.Port}}</td>
+                <td></td>
+                <td><a href="/rulesedit/{{.Rid}}">{{.Rname}}</a> | <a>{{.Rstatus}}</td>
+                <td><a href="/itemsedit/{{.Siid}}">{{.Sitem}}</a> | <a>{{.SIstatus}}</td>
+                <td><a href="/itemsedit/{{.Diid}}">{{.Ditem}}</a> | <a>{{.DIstatus}}</td>
+                <td><a href="/servicesedit/{{.Ssid}}">{{.Sservice}}</a> | <a>{{.SSstatus}}</td>
+                <td><a href="/servicesedit/{{.Dsid}}">{{.Dservice}}</a> | <a>{{.DSstatus}}</td>
+            </tr>
+            {{end}}
+        </table>
+        <br><br><br>
+        <span><font size="3" color="#808080">DESTINATION ACLs that are included in this Service</font></span>
+        <table>
+            <thead><th>Protocol</th><th>Source</th><th>Destination</th><th>Port</th><th></th><th>R name</th><th>S item</th><th>D item</th><th>S service</th><th>D service</th></thead>
+            {{range .DAcls }}
+            <tr>
+                <td>{{.Protocol}}</td>
+                <td>{{.Source}}</td>
+                <td>{{.Destination}}</td>
+                <td>{{.Port}}</td>
+                <td></td>
+                <td><a href="/rulesedit/{{.Rid}}">{{.Rname}}</a> | <a>{{.Rstatus}}</td>
+                <td><a href="/itemsedit/{{.Siid}}">{{.Sitem}}</a> | <a>{{.SIstatus}}</td></td>
+                <td><a href="/itemsedit/{{.Diid}}">{{.Ditem}}</a> | <a>{{.DIstatus}}</td>
+                <td><a href="/servicesedit/{{.Ssid}}">{{.Sservice}}</a> | <a>{{.SSstatus}}</td>
+                <td><a href="/servicesedit/{{.Dsid}}">{{.Dservice}}</a> | <a>{{.DSstatus}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>

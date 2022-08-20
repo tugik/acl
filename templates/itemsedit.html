@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <link type="text/css" rel="stylesheet" href="/templates/chosen.min.css">
+        <title>Edit Item</title>
+    </head>
+    <body>
+        <script src="/templates/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="/templates/chosen.jquery.min.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+
+            $(function(){
+                $(".chosen-select").chosen({width: "12%", no_results_text: "Oops, nothing found!"});
+            });
+
+        </script>
+
+        <style type="text/css">
+        </style>
+
+        <h3><img src="/templates/main-icon.png" width=25px; height=25px;>   Edit Item</h3>
+        <form method="POST">
+            <input type="hidden" name="id" value="{{.Item.Id}}" /><br>
+            <label><b>Name:</label></b><br>
+            <input class="form" type="text" name="name" value="{{.Item.Name}}" size="17" required/><br><br>
+            <label><b>Description:</label></b><br>
+            <textarea class="form" type="text" name="description" value="{{.Item.Description}}" size="30" >{{.Item.Description}}</textarea><br><br>
+            <th><b>Services:</b></th><br>
+            <select required class="chosen-select" name="sid" style="height:30px;">
+                <option selected disabled></option>
+                {{range .Services}}
+                <option value="{{.Id}}" {{if eq $.Item.Sid .Id}}selected{{end}} > {{.Name}}</option>
+                {{end}}
+            </select><br><br><br>
+            <label><b>Protocol:</b></label><br>
+            <select class="select select1" name="protocol" style="height:30px; width:65px;">
+                <option value="tcp" {{if eq "tcp" .Item.Protocol}}selected{{end}} > tcp</option><br><br>
+                <option value="udp" {{if eq "udp" .Item.Protocol}}selected{{end}} > udp</option><br><br>
+                <option value="all" {{if eq "all" .Item.Protocol}}selected{{end}} > all</option><br><br>
+            </select><br><br><br>
+            <label><b>Cidr:</b></label><br>
+            <input class="form" type="text" name="cidr" value="{{.Item.Cidr}}" size="13" required pattern="^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])(\/[0-9]{1}?|\/[1-2][0-9]{1}?|\/3[0-2]{1}?)?$|^inet$|^ournets$" /> <div class="tooltip"> - format<span class="tooltiptext">10.10.10.10<br>10.10.10.10/32<br>inet<br>ournets<br>everywhere<br>ournets<br> </span></div> <br><br>
+            <label><b>Port:</b></label><br>
+            <input class="form" type="text" name="port" value="{{.Item.Port}}" size="5" required pattern="^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$|^any$" /> <div class="tooltip"> - format<span class="tooltiptext">0 - 65535<br>any</span></div> <br><br>
+            <label><b>Status:</b></label><br>
+            <select class="select select1" name="status" style="width:100px">
+                <option value="enabled" {{if eq "enabled" .Item.Status}}selected{{end}} > enabled</option><br><br>
+                <option value="disabled" {{if eq "disabled" .Item.Status}}selected{{end}} > disabled</option><br><br>
+                <option value="deleted" {{if eq "deleted" .Item.Status}}selected{{end}} > deleted</option><br><br>
+            </select><br><br><br>
+            <input class="button button1" type="submit" value="Edit Item" style="height:40px; width:100px;"/>
+            <button class="button button1" style="height:40px; width:100px;" onclick="history.back();">Cancel</button>
+        </form>
+        <br><br><br>
+        <span><font size="3" color="#808080">SOURCE ACLs that are included in this Item</font></span>
+        <table>
+            <thead><th>Protocol</th><th>Source</th><th>Destination</th><th>Port</th><th></th><th>R name</th><th>S item</th><th>D item</th><th>S service</th><th>D service</th></thead>
+            {{range .SAcls }}
+            <tr>
+                <td>{{.Protocol}}</td>
+                <td>{{.Source}}</td>
+                <td>{{.Destination}}</td>
+                <td>{{.Port}}</td>
+                <td></td>
+                <td><a href="/rulesedit/{{.Rid}}">{{.Rname}}</a> | <a>{{.Rstatus}}</td>
+                <td><a href="/itemsedit/{{.Siid}}">{{.Sitem}}</a> | <a>{{.SIstatus}}</td>
+                <td><a href="/itemsedit/{{.Diid}}">{{.Ditem}}</a> | <a>{{.DIstatus}}</td>
+                <td><a href="/servicesedit/{{.Ssid}}">{{.Sservice}}</a> | <a>{{.SSstatus}}</td>
+                <td><a href="/servicesedit/{{.Dsid}}">{{.Dservice}}</a> | <a>{{.DSstatus}}</td>
+            </tr>
+            {{end}}
+        </table>
+        <br><br><br>
+        <span><font size="3" color="#808080">SOURCE ACLs that are included in this Item</font></span>
+        <table>
+            <thead><th>Protocol</th><th>Source</th><th>Destination</th><th>Port</th><th></th><th>R name</th><th>S item</th><th>D item</th><th>S service</th><th>D service</th></thead>
+            {{range .DAcls }}
+            <tr>
+                <td>{{.Protocol}}</td>
+                <td>{{.Source}}</td>
+                <td>{{.Destination}}</td>
+                <td>{{.Port}}</td>
+                <td></td>
+                <td><a href="/rulesedit/{{.Rid}}">{{.Rname}}</a> | <a>{{.Rstatus}}</td>
+                <td><a href="/itemsedit/{{.Siid}}">{{.Sitem}}</a> | <a>{{.SIstatus}}</td>
+                <td><a href="/itemsedit/{{.Diid}}">{{.Ditem}}</a> | <a>{{.DIstatus}}</td>
+                <td><a href="/servicesedit/{{.Ssid}}">{{.Sservice}}</a> | <a>{{.SSstatus}}</td>
+                <td><a href="/servicesedit/{{.Dsid}}">{{.Dservice}}</a> | <a>{{.DSstatus}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>

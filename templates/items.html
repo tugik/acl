@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <title>Items</title>
+    </head>
+    <body>
+        <h2>
+        <img src="/templates/main-icon.png" width=25px; height=25px;>   Items List  
+        <button class="button button0 button1" onclick="location.href='/';">Menu</button>
+        <button class="button button0 button1" onclick="location.href='/itemsadd';">Add Items</button>
+        </h2>
+        <table>
+            <thead><th>Id</th><th>Service</th><th>Name</th><th>Description</th><th>Protocol</th><th>cidr</th><th>port</th><th>Status</th><th></th></thead>
+            {{range . }}
+            <tr>
+                <td>{{.Id}}</td>
+                <td><a href="/servicesedit/{{.Sid}}">{{.Sname}}</td>
+                <td><a href="/itemsedit/{{.Id}}">{{.Name}}</td>
+                <td>{{.Description}}</td>
+                <td>{{.Protocol}}</td>
+                <td>{{.Cidr}}</td>
+                <td>{{.Port}}</td>
+                <td>{{.Status}}</td>
+                <td><a href="/itemsedit/{{.Id}}">Edit</a> |
+                    <a href="/itemsdelete/{{.Id}}">Delete</a>
+                </td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>

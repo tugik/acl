@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <link type="text/css" rel="stylesheet" href="/templates/chosen.min.css">
+        <title>Edt Rule</title>
+    </head>
+    <body>
+
+
+        <script src="/templates/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="/templates/chosen.jquery.min.js" type="text/javascript"></script>
+        
+<!--
+<script type="text/javascript">
+
+(function($) {
+  'use strict';
+  $(document).ready(function() {
+    $('.chosen-select').chosen({width: "12%", no_results_text: "Oops, nothing found!"});
+  });
+})(window.jQuery);
+
+</script>
+-->
+
+        <script type="text/javascript">
+
+            $(function(){
+                $(".chosen-select").chosen({width: "12%", no_results_text: "Oops, nothing found!"});
+            });
+            
+        </script>
+        
+        <style type="text/css">
+        </style>
+
+        <h3><img src="/templates/main-icon.png" width=25px; height=25px;>   Edit Rule</h3>
+        <form method="POST">
+            <input type="hidden" name="id" value="{{.Rule.Id}}" /><br>
+            <label><b>Name:</label></b><br>
+            <input class="form" type="text" name="name" value="{{.Rule.Name}}" size="17" required/><br><br>
+            <label><b>Description:</label></b><br>
+            <textarea class="form" type="text" name="description" value="{{.Rule.Description}}" size="30" >{{.Rule.Description}}</textarea><br><br><br>
+            <th><b>Services:</b></th><br><br>
+            &nbsp;<th>Source:</th><br>
+            <select required class="chosen-select" name="sid" style="height:30px;">
+                <option selected disabled></option>
+                {{range .Services}}
+                <option value="{{.Id}}" {{if eq $.Rule.Sid .Id}}selected{{end}} > {{.Name}}</option>
+                {{end}}
+            </select><br><br>
+            &nbsp;<th>Destination:</th><br>
+            <select required class="chosen-select" name="did" style="height:30px;">
+                <option selected disabled></option>
+                {{range .Services}}
+                <option value="{{.Id}}" {{if eq $.Rule.Did .Id}}selected{{end}} > {{.Name}}</option><br><br>
+                {{end}}
+            </select><br><br><br>
+           <label><b>Status:</b></label><br>
+            <select class="select select1" name="status" style="width:100px">
+                <option value="enabled" {{if eq "enabled" .Rule.Status}}selected{{end}} > enabled</option><br><br>
+                <option value="disabled" {{if eq "disabled" .Rule.Status}}selected{{end}} > disabled</option><br><br>
+                <option value="deleted" {{if eq "deleted" .Rule.Status}}selected{{end}} > deleted</option><br><br>
+            </select><br><br><br>
+            <input class="button button1" type="submit" value="Edit Rule" style="height:40px; width:100px" />
+            <button class="button button1" style="height:40px; width:100px" onclick="history.back();">Cancel</button>
+        </form>
+        <br><br><br>
+        <span><font size="3" color="#808080">ACLs that are included in this Rule</font></span>
+        <table>
+            <thead><th>Protocol</th><th>Source</th><th>Destination</th><th>Port</th><th></th><th>R name</th><th>S item</th><th>D item</th><th>S service</th><th>D service</th></thead>
+            {{range .Acls }}
+            <tr>
+                <td>{{.Protocol}}</td>
+                <td>{{.Source}}</td>
+                <td>{{.Destination}}</td>
+                <td>{{.Port}}</td>
+                <td></td>
+                <td><a href="/rulesedit/{{.Rid}}">{{.Rname}}</a> | <a>{{.Rstatus}}</td>
+                <td><a href="/itemsedit/{{.Siid}}">{{.Sitem}}</a> | <a>{{.SIstatus}}</td>
+                <td><a href="/itemsedit/{{.Diid}}">{{.Ditem}}</a> | <a>{{.DIstatus}}</td>
+                <td><a href="/servicesedit/{{.Ssid}}">{{.Sservice}}</a> | <a>{{.SSstatus}}</td>
+                <td><a href="/servicesedit/{{.Dsid}}">{{.Dservice}}</a> | <a>{{.DSstatus}}</td>
+            </tr>
+            {{end}}
+        </table>
+    </body>
+</html>

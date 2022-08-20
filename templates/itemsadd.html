@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/templates/style.css">
+        <link rel="icon" href="/templates/favicon.ico">
+        <link type="text/css" rel="stylesheet" href="/templates/chosen.min.css">
+        <title>Add Item</title>
+    </head>
+    <body>
+        <script src="/templates/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="/templates/chosen.jquery.min.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+
+            $(function(){
+                $(".chosen-select").chosen({width: "12%", no_results_text: "Oops, nothing found!"});
+            });
+
+        </script>
+
+        <style type="text/css">
+        </style>
+
+        <h3><img src="/templates/main-icon.png" width=25px; height=25px;>   Add Item</h3><br>
+        <form method="POST">
+            <label><b>Name:</b><span style="color:red;" > *</span></label><br>
+            <input class="form" type="text" name="name" size=17 required/><br><br>
+            <label><b>Description:</b></label><br>
+            <textarea class="form" type="text" name="description" size="30" ></textarea><br><br>
+            <label><b>Service:</b><span style="color:red;" > *</span></label><br>
+            <select required class="chosen-select" name="sid" style="height:30px;">
+                <option selected disabled></option>
+                {{range .Services}}
+                <option value="{{.Id}}" {{if eq .Id $.ServiceID}}selected{{end}}> {{.Name}}</option><br><br>
+                {{end}}
+            </select><br><br><br>
+            <label><b>Protocol:</b></label><br>
+            <select class="select select1" name="protocol" style="height:35px; width:65px;">
+                <option value="tcp" selected>tcp</option>
+                <option value="udp">udp</option>
+                <option value="all">all</option>
+            </select><br><br>
+            <label><b>Cidr:</b><span style="color:red;" > *</span></label><br>
+            <input class="form" type="text" name="cidr" size="13" required pattern="^([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])\.([01]?\d\d?|2[0-4]\d|25[0-5])(\/[0-9]{1}?|\/[1-2][0-9]{1}?|\/3[0-2]{1}?)?$|^inet$|^ournets$" />  <div class="tooltip"> - format<span class="tooltiptext">10.10.10.10<br>10.10.10.10/32<br>inet<br>ournets<br>everywhere<br>ournets<br> </span></div> <br><br>
+            <label><b>Port:</b><span style="color:red;" > *</span></label><br>
+            <input class="form" type="text" name="port" size="5" required pattern="^((6553[0-5])|(655[0-2][0-9])|(65[0-4][0-9]{2})|(6[0-4][0-9]{3})|([1-5][0-9]{4})|([0-5]{0,5})|([0-9]{1,4}))$|^any$" /> <div class="tooltip"> - format<span class="tooltiptext">0 - 65535<br>any</span></div> <br><br>
+            <label><b>Status:</b></label><br>
+            <select class="select select1" name="status" style="width:100px">
+                <option value="enabled" selected>enabled</option>
+                <option value="disabled">disabled</option>
+                <option value="deleted">deleted</option>
+            </select><br><br>
+            <span style="margin-left: 10px; color:red;" > * required</span><br><br>
+            <input class="button button1" type="submit" value="Add Item" style="height:40px; width:100px;"/>
+            <button class="button button1" style="height:40px; width:100px;" onclick="history.back();">Cancel</button>
+        </form>
+    </body>
+</html>

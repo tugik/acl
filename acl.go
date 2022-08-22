@@ -110,14 +110,14 @@ type Event struct {
 var database *sql.DB
 
 // ====================================================================== Index ==============================================================================================
-// функция стартовйо страницы
+// func for start page
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "templates/index.html")
 }
 
 // ====================================================================== Services ===========================================================================================
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция удаления данных и запись в лог - Service
+// func delete data and write to log - Service
 func ServicesDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -135,12 +135,12 @@ func ServicesDeleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция предварительно возвращает пользователю страницу для редактирования объекта - Service
+// func return praapre page for edit ogject - Service
 func ServicesEditPage(w http.ResponseWriter, r *http.Request) {
 	var sdata ServiceEdit
 	vars := mux.Vars(r)
 	id := vars["id"]
-	//  выборка всех Items которые добавлены в этот Service ----------------------------------------------
+	//  select all Items who include Service ----------------------------------------------
 	rows, err := database.Query("SELECT i.id, s.id AS sid, s.name AS sname, i.name, i.description, i.protocol, i.cidr, i.port, i.status FROM items i JOIN services s ON i.service_id=s.id WHERE s.id = ? ORDER BY id DESC", id)
 	if err != nil {
 		log.Println(err)
@@ -156,7 +156,7 @@ func ServicesEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.Items = append(sdata.Items, itm)
 	}
 
-	// выборка  Source Acls которое входят в этот Service ------------------------------------------------
+	// select  Source Acls who include Service ------------------------------------------------
 	srows, err := database.Query("SELECT d.protocol, s.cidr AS source, d.cidr AS destination, d.port, r.id AS rid, r.name AS rname, r.status AS rstatus, s.id AS siid, s.name AS sitem, s.status AS sistatus, d.id AS diid, d.name AS ditem, d.status AS distatus, sr.id AS ssid, sr.name AS sservice, sr.status AS ssstatus, dr.id AS dsid, dr.name AS dservice, dr.status AS dsstatus FROM rules r JOIN items s ON r.source=s.service_id JOIN items d ON r.destination=d.service_id JOIN services sr ON r.source=sr.id JOIN services dr ON r.destination=dr.id  WHERE sr.id = ? ;", id)
 	if err != nil {
 		log.Println(err)
@@ -172,7 +172,7 @@ func ServicesEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.SAcls = append(sdata.SAcls, acl)
 	}
 
-	// выборка  Destination Acls которое входят в этот Service -------------------------------------------
+	// select  Destination Acls sho include Service -------------------------------------------
 	drows, err := database.Query("SELECT d.protocol, s.cidr AS source, d.cidr AS destination, d.port, r.id AS rid, r.name AS rname, r.status AS rstatus, s.id AS siid, s.name AS sitem, s.status AS sistatus, d.id AS diid, d.name AS ditem, d.status AS distatus, sr.id AS ssid, sr.name AS sservice, sr.status AS ssstatus, dr.id AS dsid, dr.name AS dservice, dr.status AS dsstatus FROM rules r JOIN items s ON r.source=s.service_id JOIN items d ON r.destination=d.service_id JOIN services sr ON r.source=sr.id JOIN services dr ON r.destination=dr.id  WHERE dr.id = ? ;", id)
 	if err != nil {
 		log.Println(err)
@@ -188,7 +188,7 @@ func ServicesEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.DAcls = append(sdata.DAcls, acl)
 	}
 
-	// выборка значений Service для редактирования -------------------------------------------------------
+	// select Service for edit -------------------------------------------------------
 	row := database.QueryRow("select id, name, description, status from acl.services where id = ? ORDER BY id", id)
 	//itm := Item{}
 	err = row.Scan(&sdata.Service.Id, &sdata.Service.Name, &sdata.Service.Description, &sdata.Service.Status)
@@ -206,7 +206,7 @@ func ServicesEditPage(w http.ResponseWriter, r *http.Request) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция изменения данных и запись в лог - Service
+// fucne change data and write to log  - Service
 func ServicesEditHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -241,7 +241,7 @@ func ServicesEditHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция добавления данных и запись в лог - Service
+// fucn add data and write to log  - Service
 func ServicesCreateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
@@ -280,7 +280,7 @@ func ServicesCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  функция  вывода данных - Service
+//  fucn show data - Service
 func ServicesIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := database.Query("select * from acl.services ORDER BY id DESC")
@@ -306,7 +306,7 @@ func ServicesIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Items ==============================================================================================
 // ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция удаления данных и запись в лог - Item
+// func delete data and write to log - Service
 func ItemsDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -324,13 +324,13 @@ func ItemsDeleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция предварительно возвращает пользователю страницу для редактирования объекта - Item
+// fucn prapare return page for edit object - Item
 func ItemsEditPage(w http.ResponseWriter, r *http.Request) {
 	var sdata ItemEdit
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	//  выборка всех Services для выбора -----------------------------------------------------------------
+	//  select all Services for chose -----------------------------------------------------------------
 	rows, err := database.Query("SELECT * FROM acl.services ORDER BY id")
 	if err != nil {
 		log.Println(err)
@@ -347,7 +347,7 @@ func ItemsEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.Services = append(sdata.Services, p)
 	}
 
-	// выборка  Source Acls которое входят в  этот Items -------------------------------------------------
+	// select  Source Acls who include to Items -------------------------------------------------
 	srows, err := database.Query("SELECT d.protocol, s.cidr AS source, d.cidr AS destination, d.port, r.id AS rid, r.name AS rname, r.status AS rstatus, s.id AS siid, s.name AS sitem, s.status AS sistatus, d.id AS diid, d.name AS ditem, d.status AS distatus, sr.id AS ssid, sr.name AS sservice, sr.status AS ssstatus, dr.id AS dsid, dr.name AS dservice, dr.status AS dsstatus FROM rules r JOIN items s ON r.source=s.service_id JOIN items d ON r.destination=d.service_id JOIN services sr ON r.source=sr.id JOIN services dr ON r.destination=dr.id  WHERE s.id = ? ;", id)
 	if err != nil {
 		log.Println(err)
@@ -363,7 +363,7 @@ func ItemsEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.SAcls = append(sdata.SAcls, acl)
 	}
 
-	// выборка  Destination Acls которое входят в этот Items ---------------------------------------------
+	// select  Destination Acls who icnlude to Items ---------------------------------------------
 	drows, err := database.Query("SELECT d.protocol, s.cidr AS source, d.cidr AS destination, d.port, r.id AS rid, r.name AS rname, r.status AS rstatus, s.id AS siid, s.name AS sitem, s.status AS sistatus, d.id AS diid, d.name AS ditem, d.status AS distatus, sr.id AS ssid, sr.name AS sservice, sr.status AS ssstatus, dr.id AS dsid, dr.name AS dservice, dr.status AS dsstatus FROM rules r JOIN items s ON r.source=s.service_id JOIN items d ON r.destination=d.service_id JOIN services sr ON r.source=sr.id JOIN services dr ON r.destination=dr.id  WHERE d.id = ? ;", id)
 	if err != nil {
 		log.Println(err)
@@ -379,7 +379,7 @@ func ItemsEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.DAcls = append(sdata.DAcls, acl)
 	}
 
-	// выборка значений Item для редактирования ----------------------------------------------------------
+	// select  Item for edit ----------------------------------------------------------
 	row := database.QueryRow("SELECT i.id, s.id AS sid, s.name AS sname, i.name, i.description, i.protocol, i.cidr, i.port, i.status FROM items i JOIN services s ON i.service_id=s.id WHERE i.id = ?", id)
 	//itm := Item{}
 	err = row.Scan(&sdata.Item.Id, &sdata.Item.Sid, &sdata.Item.Sname, &sdata.Item.Name, &sdata.Item.Description, &sdata.Item.Protocol, &sdata.Item.Cidr, &sdata.Item.Port, &sdata.Item.Status)
@@ -397,7 +397,7 @@ func ItemsEditPage(w http.ResponseWriter, r *http.Request) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция изменения данных и запись в лог - Item
+// fucn change data and write to log - Item
 func ItemsEditHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -412,7 +412,7 @@ func ItemsEditHandler(w http.ResponseWriter, r *http.Request) {
 	port := r.FormValue("port")
 	status := r.FormValue("status")
 
-	//выборка  имени Services ----------------------------------------------------------------------------
+	//chose name Services ----------------------------------------------------------------------------
 	var sname string
 	srow := database.QueryRow("select name from services where id = ?", service_id)
 	err = srow.Scan(&sname)
@@ -420,7 +420,7 @@ func ItemsEditHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	// транзакция
+	// transaction
 	ok := true
 	database.Exec("begin")
 	_, err = database.Exec("update acl.items set service_id=?, name=?, description=?, protocol=?, cidr=?, port=?, status = ? where id = ?", service_id, name, description, protocol, cidr, port, status, id)
@@ -444,7 +444,7 @@ func ItemsEditHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция возвращает пользователю страницу для добавления объекта items предварительно получив список services -  Items
+// fucne return page for add object item  and get list of servce -  Items
 func ItemsCreatePage(w http.ResponseWriter, r *http.Request) {
 
 	//предварительно выбрать id сервиса
@@ -478,7 +478,7 @@ func ItemsCreatePage(w http.ResponseWriter, r *http.Request) {
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция добавления данных и запись в лог - Item
+// func add  data and write to log  - Item
 func ItemsCreateHandler(w http.ResponseWriter, r *http.Request) {
 	//vars := mux.Vars(r)
 	//service_id := vars["Sid"]
@@ -494,7 +494,7 @@ func ItemsCreateHandler(w http.ResponseWriter, r *http.Request) {
 	port := r.FormValue("port")
 	status := r.FormValue("status")
 
-	//выборка  имени Services ----------------------------------------------------------------------------
+	//selet name  Services ----------------------------------------------------------------------------
 	var sname string
 	srow := database.QueryRow("select name from services where id = ?", service_id)
 	err = srow.Scan(&sname)
@@ -502,7 +502,7 @@ func ItemsCreateHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	// транзакция
+	// transaction
 	ok := true
 	database.Exec("begin")
 	_, err = database.Exec("insert into acl.items (service_id, name, description, protocol, cidr, port, status) values (?, ?, ?, ?, ?, ?, ?)", service_id, name, description, protocol, cidr, port, status)
@@ -526,7 +526,7 @@ func ItemsCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  функция  вывода данных - Item
+//  fucn show data - Item
 func ItemsIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := database.Query("select items.id, services.id as sid, services.name as sname, items.name, items.description, items.protocol, items.cidr, items.port, items.status, items.created, items.updated from items join services on services.id = items.service_id ORDER BY id DESC;")
@@ -553,7 +553,7 @@ func ItemsIndexHandler(w http.ResponseWriter, r *http.Request) {
 // ====================================================================== Rules =============================================================================================
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция удаления данных и запись в лог - Rule
+// func delete data and write to log - Service
 func RulesDeleteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
@@ -571,13 +571,13 @@ func RulesDeleteHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция предварительно возвращает пользователю страницу для редактирования объекта - Rule
+// fucn prepare return page for edtn object - Rule
 func RulesEditPage(w http.ResponseWriter, r *http.Request) {
 	var sdata RuleEdit
 	vars := mux.Vars(r)
 	id := vars["id"]
 
-	//  выборка всех Services  ---------------------------------------------------------------------------
+	//  select all Services  ---------------------------------------------------------------------------
 	rows, err := database.Query("select * from acl.services ORDER BY id")
 	if err != nil {
 		log.Println(err)
@@ -594,7 +594,7 @@ func RulesEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.Services = append(sdata.Services, p)
 	}
 
-	// выборка  Acls  которое входят в эту Rule ----------------------------------------------------------
+	// select  Acls  who includt to Rule ----------------------------------------------------------
 	arows, err := database.Query("SELECT d.protocol, s.cidr AS source, d.cidr AS destination, d.port, r.id AS rid, r.name AS rname, r.status AS rstatus, s.id AS siid, s.name AS sitem, s.status AS sistatus, d.id AS diid, d.name AS ditem, d.status AS distatus, sr.id AS ssid, sr.name AS sservice, sr.status AS ssstatus, dr.id AS dsid, dr.name AS dservice, dr.status AS dsstatus FROM rules r JOIN items s ON r.source=s.service_id JOIN items d ON r.destination=d.service_id JOIN services sr ON r.source=sr.id JOIN services dr ON r.destination=dr.id  WHERE r.id = ?;", id)
 	if err != nil {
 		log.Println(err)
@@ -610,7 +610,7 @@ func RulesEditPage(w http.ResponseWriter, r *http.Request) {
 		sdata.Acls = append(sdata.Acls, acl)
 	}
 
-	// выборка значений rule для редактирования ----------------------------------------------------------
+	// select rule for edit ----------------------------------------------------------
 	row := database.QueryRow("SELECT r.id, s.id AS sid, s.name AS sname, d.id AS did, d.name AS dname, r.name, r.description, r.status FROM rules r JOIN services s ON r.source=s.id JOIN services d ON r.destination=d.id WHERE r.id = ?;", id)
 	//rul := Rule{}
 	err = row.Scan(&sdata.Rule.Id, &sdata.Rule.Sid, &sdata.Rule.Source, &sdata.Rule.Did, &sdata.Rule.Destination, &sdata.Rule.Name, &sdata.Rule.Description, &sdata.Rule.Status)
@@ -628,7 +628,7 @@ func RulesEditPage(w http.ResponseWriter, r *http.Request) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция изменения данных и запись в лог - Rules
+// fune edti datat and write to log  - Rules
 func RulesEditHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -641,7 +641,7 @@ func RulesEditHandler(w http.ResponseWriter, r *http.Request) {
 	description := r.FormValue("description")
 	status := r.FormValue("status")
 
-	//выборка  имени Services ----------------------------------------------------------------------------
+	//select name Services ----------------------------------------------------------------------------
 	var sname string
 	var dname string
 	srow := database.QueryRow("select name from services where id = ?", sid)
@@ -655,7 +655,7 @@ func RulesEditHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	// транзакция
+	// transaction
 	ok := true
 	database.Exec("begin")
 	_, err = database.Exec("update acl.rules set source=?, destination=?, name=?, description=?, status = ? where id = ?", sid, did, name, description, status, id)
@@ -679,7 +679,7 @@ func RulesEditHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция возвращает пользователю страницу для добавления объекта Rule предварительно получив список services -  Rule
+// fucne return page for add object   Rule prepare get list of services -  Rule
 func RulesCreatePage(w http.ResponseWriter, r *http.Request) {
 	rows, err := database.Query("SELECT id as sid, name as sname, id as did, name as dname FROM services ORDER BY id;")
 	if err != nil {
@@ -704,7 +704,7 @@ func RulesCreatePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// функция добавления данных и запись в лог - Rule -------------------------------------------------------
+// func add data and write to log - Rule -------------------------------------------------------
 func RulesCreateHandler(w http.ResponseWriter, r *http.Request) {
 	//vars := mux.Vars(r)
 	//service_id := vars["Sid"]
@@ -718,7 +718,7 @@ func RulesCreateHandler(w http.ResponseWriter, r *http.Request) {
 	description := r.FormValue("description")
 	status := r.FormValue("status")
 
-	//выборка  имени Services ----------------------------------------------------------------------------
+	//select name Services ----------------------------------------------------------------------------
 	var sname string
 	var dname string
 	srow := database.QueryRow("select name from services where id = ?", sid)
@@ -732,7 +732,7 @@ func RulesCreateHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	// транзакция
+	// transaction
 	ok := true
 	database.Exec("begin")
 	_, err = database.Exec("insert into acl.rules (source, destination, name, description, status) values (?, ?, ?, ?, ?)", sid, did, name, description, status)
@@ -756,7 +756,7 @@ func RulesCreateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  функция вывода данных - Rule
+//  show data - Rule
 func RulesIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := database.Query("SELECT r.id, s.id AS sid, s.name AS sname, d.id AS did, d.name AS dname, r.name, r.description, r.status, r.created, r.updated FROM rules r JOIN services s ON r.source=s.id JOIN services d ON r.destination=d.id ORDER BY id DESC;")
@@ -782,7 +782,7 @@ func RulesIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Add ==============================================================================================
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция добавления данных и запись в лог - ACLAdd
+// fucn add data and write to log - ACLAdd
 func AclAddHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
@@ -812,7 +812,7 @@ func AclAddHandler(w http.ResponseWriter, r *http.Request) {
 		rdescription := r.FormValue("rdescription")
 		rstatus := r.FormValue("rstatus")
 
-		// транзакция
+		// transaction
 		ok := true
 		database.Exec("begin")
 		_, err =
@@ -853,7 +853,7 @@ func AclAddHandler(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Acl ==============================================================================================
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция вывода и поиска данных - AclSearch
+// fucn add and search data  - AclSearch
 func AclSearchPage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -898,7 +898,7 @@ func AclSearchPage(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Events ============================================================================================
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//  функция  вывода и поиска данных - Event
+//  fucn show and search data - Event
 func EventsPage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
@@ -936,7 +936,7 @@ func EventsPage(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Apply =============================================================================================
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция обновления rule и запись в лог - Apply
+// fucn updata rule and write to log - Apply
 func ApplyHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
@@ -954,7 +954,7 @@ func ApplyHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// создание файла
+		// make file
 		file, err := os.Create("/opt/last_acl_update")
 		if err != nil {
 			fmt.Println("Unable to create file:", err)
@@ -963,7 +963,7 @@ func ApplyHandler(w http.ResponseWriter, r *http.Request) {
 		defer file.Close()
 		file.WriteString(text)
 
-		// выполнение команды cmd
+		// run command  cmd
 		// cmd := exec.Command(`/bin/echo`, `>`, `"1"`, `/opt/last_acl_update`)
 		// stdoutStderr, err := cmd.CombinedOutput()
 		// if err != nil {
@@ -980,7 +980,7 @@ func ApplyHandler(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Txt ===============================================================================================
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция выводит текстовый файл
+// func show txt file
 func TxtIndexHandler(w http.ResponseWriter, r *http.Request) {
 	f, err := os.Open("/opt/rului.conf")
 	if err != nil {
@@ -1022,7 +1022,7 @@ func TxtIndexHandler(w http.ResponseWriter, r *http.Request) {
 
 // ====================================================================== Main ==============================================================================================
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// функция  main
+// func  main
 func main() {
 
 	db, err := sql.Open("mysql", "acluser:aclpass@/acl")
